@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Penerjemah Nada Angklung</title>
+  <meta name="description" content="Aplikasi web untuk menerjemahkan angklung bass partai berbasis huruf dan angklung melodi berbasis angka ke nada absolut, solmisasi, register, dan angka musik dengan visual coret." />
+  <link rel="preconnect" href="https://api.fontshare.com" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    :root, [
+        data-theme="light"] 
+        { 
+            --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem); 
+            --text-sm: clamp(0.875rem, 0.8rem + 0.35vw, 1rem); 
+            --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem); 
+            --text-lg: clamp(1.125rem, 1rem + 0.75vw, 1.5rem); 
+            --text-xl: clamp(1.5rem, 1.2rem + 1.25vw, 2.25rem); 
+            --space-1:.25rem; 
+            --space-2:.5rem; 
+            --space-3:.75rem; 
+            --space-4:1rem; 
+            --space-5:1.25rem; 
+            --space-6:1.5rem; 
+            --space-8:2rem; 
+            --space-10:2.5rem; 
+            --space-12:3rem; 
+            --color-bg:#f7f6f2; 
+            --color-surface:#f9f8f5; 
+            --color-surface-2:#fbfbf9; 
+            --color-surface-offset:#f3f0ec; 
+            --color-border:#d4d1ca; 
+            --color-divider:#dcd9d5; 
+            --color-text:#28251d; 
+            --color-text-muted:#6f6b64; 
+            --color-text-faint:#99958d; 
+            --color-text-inverse:#f9f8f4; 
+            --color-primary:#01696f; 
+            --color-primary-hover:#0c4e54; 
+            --color-primary-highlight:#cedcd8; 
+            --color-low:#1d4ed8; 
+            --color-mid:#2f855a; 
+            --color-high:#c53030; 
+            --color-high2:#111111; 
+            --radius-sm:.375rem; 
+            --radius-md:.5rem; 
+            --radius-lg:.75rem; 
+            --radius-xl:1rem; 
+            --radius-full:9999px; 
+            --shadow-sm:0 1px 2px oklch(0.2 0.01 80 / .06); 
+            --shadow-md:0 6px 20px oklch(0.2 0.01 80 / .1); 
+            --font-body:'Satoshi',system-ui,sans-serif; 
+            --font-cipher:'Roboto Slab',serif; 
+            }
+    [data-theme="dark"] { 
+        --color-bg:#171614; 
+        --color-surface:#1c1b19; 
+        --color-surface-2:#201f1d; 
+        --color-surface-offset:#1d1c1a; 
+        --color-border:#393836; 
+        --color-divider:#262523; 
+        --color-text:#cdccca; 
+        --color-text-muted:#979591; 
+        --color-text-faint:#6c6964; 
+        --color-text-inverse:#2b2a28; 
+        --color-primary:#4f98a3; 
+        --color-primary-hover:#227f8b; 
+        --color-primary-highlight:#313b3b; 
+        --color-low:#7fb0ff; 
+        --color-mid:#68d391; 
+        --color-high:#fc8181; 
+        --color-high2:#f5f5f5; 
+        --shadow-sm:0 1px 2px oklch(0 0 0 / .2); 
+        --shadow-md:0 8px 28px oklch(0 0 0 / .35); 
+        }
+
+    *,*::before,*::after{
+        box-sizing:border-box;
+        margin:0;padding:0} 
+        
+    html{
+        -webkit-text-size-adjust:none;text-size-adjust:none;
+        scroll-behavior:smooth} 
+        
+    body{
+        min-height:100dvh;
+        font-family:var(--font-body);
+        font-size:var(--text-base);
+        line-height:1.6;
+        color:var(--color-text);
+        background:radial-gradient(circle at top right,color-mix(in oklab,
+        var( --color-primary) 10%,transparent),transparent 24%),
+        var(--color-bg)} 
+                    
+    button,input,select,textarea{
+        font:inherit;
+        color:inherit} 
+        
+    button{
+        cursor:pointer;
+        border:none;
+        background:none} 
+    
+    :focus-visible{
+        outline:2px solid 
+        var(--color-primary);
+        outline-offset:3px;
+        border-radius:
+        var(--radius-sm)
+        }
+
+    .app-shell{
+        max-width:1240px;
+        margin:0 auto;
+        padding:var(--space-6)} 
+        
+    .skip-link{
+        position:absolute;
+        left:var(--space-4);
+        top:-40px;
+        background:var(--color-primary);
+        color:var(--color-text-inverse);
+        padding:var(--space-2) var(--space-3);
+        border-radius:var(--radius-md);z-index:20}
+        
+    .skip-link:focus{
+        top:var(--space-4)}
+
+    .topbar{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:var(--space-4);
+        margin-bottom:var(--space-8)} 
+        
+    .brand{
+        display:flex;
+        align-items:center;
+        gap:var(--space-3)} 
+        
+    .brand svg{
+        width:38px;
+        height:38px;
+        color:var(--color-primary)} 
+        
+    .brand-copy strong{
+        display:block;
+        font-size:var(--text-sm)} 
+        
+    .brand-copy span{
+        display:block;
+        color:var(--color-text-muted);
+        font-size:var(--text-xs)} 
+        
+    .theme-toggle{
+        width:44px;
+        height:44px;
+        display:grid;place-items:center;
+        border:1px solid color-mix(in oklab,var(--color-text) 14%,transparent);
+        border-radius:var(--radius-full);
+        background:var(--color-surface);
+        box-shadow:var(--shadow-sm)}
+
+    .hero,.workspace{
+        display:grid;
+        gap:var(--space-6)} 
+        
+    .hero{
+        grid-template-columns:1.15fr .85fr;
+        margin-bottom:var(--space-8)} 
+        
+    .workspace{
+        grid-template-columns:1fr} 
+        
+    .panel{
+        background:color-mix(in oklab,var(--color-surface) 92%,var(--color-bg));
+        border:1px solid color-mix(in oklab,var(--color-text) 12%,transparent);
+        border-radius:var(--radius-xl);box-shadow:var(--shadow-md)} 
+        
+    .hero-main{
+        padding:var(--space-8)} 
+        
+    .hero-side,.card{
+        padding:var(--space-6)} 
+        
+    .hero-side{
+        display:grid;
+        gap:var(--space-4);
+        align-content:start}
+
+    .eyebrow{
+        display:inline-flex;
+        align-items:center;
+        gap:var(--space-2);
+        padding:var(--space-2) var(--space-3);
+        border-radius:var(--radius-full);
+        background:var(--color-primary-highlight);
+        color:var(--color-primary);
+        font-size:var(--text-xs);
+        font-weight:700;
+        letter-spacing:.04em;
+        text-transform:uppercase;
+        margin-bottom:var(--space-4)
+        }
+         
+    h1{
+        font-size:var(--text-xl);
+        line-height:1.12;
+        max-width:20ch;
+        margin-bottom:var(--space-4)} 
+        
+    .lead,
+    .section-note,
+    .muted,
+    .footer-note{color:var(--color-text-muted)} 
+    
+    .mini-stat,
+    .result-box,
+    
+    .multi-card{
+        padding:var(--space-4);
+        border-radius:var(--radius-lg);
+        background:var(--color-surface-2);
+        border:1px solid color-mix(in oklab,var(--color-text) 10%,transparent)} 
+        
+    .mini-stat strong,
+    .result-box strong,
+
+    .multi-card strong{
+        display:block;
+        font-size:var(--text-lg)
+        }
+
+    .card 
+    
+    h2{
+        font-size:var(--text-lg);
+        margin-bottom:var(--space-2)} 
+        
+    .section-note{
+        margin-bottom:var(--space-4);
+        font-size:var(--text-sm)} 
+        
+    .controls,
+    .field,
+    .result-grid,
+    
+    .sequence{
+        display:grid;
+        gap:var(--space-4)} 
+        
+    .grid-2{
+        display:grid;
+        grid-template-columns:minmax(220px,.42fr) minmax(0,.58fr);
+        gap:var(--space-4);align-items:stretch} 
+        
+    .field{
+        gap:var(--space-2)} 
+        
+    .field label{
+        font-size:var(--text-sm);
+        font-weight:700} 
+        
+    .input,.select,textarea{
+        width:100%;
+        padding:.9rem 1rem;
+        border-radius:var(--radius-lg);
+        border:1px solid color-mix(in oklab,var(--color-text) 14%,transparent);
+        background:var(--color-surface-2)} 
+        
+    textarea.input{
+        min-height:56px;
+        height:56px;
+        resize:none;
+        overflow:hidden} 
+        
+    .select{
+        min-height:56px} 
+        
+    .input:focus,
+    .select:focus,textarea:focus{border-color:var(--color-primary);
+    box-shadow:0 0 0 4px color-mix(in oklab,var(--color-primary) 18%,transparent);outline:none}
+
+    .actions{
+        display:flex;
+        flex-wrap:wrap;
+        gap:var(--space-3)} 
+        
+    .btn{
+        min-height:44px;
+        padding:.8rem 1rem;
+        border-radius:var(--radius-lg);
+        font-size:var(--text-sm);
+        font-weight:700} 
+        
+    .btn-primary{
+        background:var(--color-primary);
+        color:var(--color-text-inverse)} 
+        
+    .btn-primary:hover{
+        background:var(--color-primary-hover)} 
+        
+    .btn-secondary{
+        background:var(--color-surface-offset);
+        border:1px solid color-mix(in oklab,var(--color-text) 12%,transparent)} 
+        
+    .btn-ghost{color:var(--color-text-muted)}
+
+    .result-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr))} 
+        
+    .result-box small,
+    .multi-card small{
+        display:block;
+        color:var(--color-text-muted);
+        font-size:var(--text-xs);
+        text-transform:uppercase;
+        letter-spacing:.05em;
+        margin-bottom:var(--space-2)} 
+        
+    .result-box .sub,
+    .multi-card .sub{
+        font-size:var(--text-sm);
+        color:var(--color-text-muted)} 
+        
+    .token-row{
+        display:flex;
+        flex-wrap:wrap;
+        gap:var(--space-2)} 
+        
+    .token{
+        padding:.45rem .7rem;
+        border-radius:var(--radius-full);
+        background:var(--color-primary-highlight);
+        color:var(--color-primary);
+        font-size:var(--text-xs);
+        font-weight:700}
+
+    .table-wrap{
+        overflow:auto;
+        border-radius:var(--radius-lg);
+        border:1px solid var(--color-divider)} 
+        
+    table{
+        width:100%;
+        border-collapse:collapse;
+        font-size:var(--text-sm)} 
+        
+    th,td{
+        padding:.9rem .85rem;
+        text-align:left;
+        border-bottom:1px solid var(--color-divider)} 
+        
+    th{
+        position:sticky;
+        top:0;
+        background:var(--color-surface-offset);
+        font-size:var(--text-xs);
+        letter-spacing:.05em;
+        text-transform:uppercase} 
+        
+    tr:hover td{
+        background:color-mix(in oklab,var(--color-primary) 4%,var(--color-surface-2))}
+    
+    .hint-list{
+        display:grid;
+        gap:var(--space-3)} 
+        
+    .hint-item{
+        padding:var(--space-4);
+        border-radius:var(--radius-lg);
+        background:var(--color-surface-2);
+        border:1px solid color-mix(in oklab,var(--color-text) 10%,transparent)} 
+        
+    .mono{
+        font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}
+
+    .solfege-low{
+        color:var(--color-low)!important;
+        font-weight:700} 
+        
+    .solfege-mid{
+        color:var(--color-mid)!important;
+        font-weight:700} .solfege-high{color:var(--color-high)!important;
+        font-weight:700} .solfege-high2{color:var(--color-high2)!important;
+        font-weight:800}
+
+    .cipher-visual{
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        position:relative;
+        min-width:1.15em;
+        line-height:1;
+        font-weight:800;
+        font-variant-numeric:tabular-nums;
+        letter-spacing:-0.02em;
+        font-size:clamp(1.35rem,1.1rem + .6vw,1.75rem);
+        font-family:var(--font-cipher);
+        text-shadow:0 .02em 0 color-mix(in oklab,currentColor 18%,transparent)} 
+        
+    .cipher-visual.cipher-slashed::after,
+    .cipher-visual.cipher-backslashed::after{
+        position:absolute;inset:50% auto auto 50%;
+        font-size:1.08em;font-weight:900;
+        pointer-events:none;line-height:1} 
+        
+    .cipher-visual.cipher-slashed::after{
+        content:'/';transform:translate(-50%,-55%) rotate(-8deg)} 
+        
+    .cipher-visual.cipher-backslashed::after{
+        content:'\\';transform:translate(-50%,-50%) rotate(8deg)} 
+        
+    .cipher-group{
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        flex-wrap:wrap}
+
+    .legend-cipher{
+        display:inline-flex;
+        align-items:center;
+        gap:.35rem;
+        padding:.3rem .55rem;
+        border-radius:var(--radius-full);
+        background:var(--color-surface-offset);border:1px solid color-mix(in oklab,var(--color-text) 10%,transparent)} 
+        
+    .section-toggle-row{
+        display:flex;
+        justify-content:flex-end;
+        margin-top:var(--space-6)} 
+        
+    .hidden-panels{
+        display:none !important}
+
+    .multi-results-wrap{
+        display:grid;gap:var(--space-4)} 
+        
+    .multi-results-grid{
+        display:grid;
+        grid-template-columns:repeat(3,minmax(0,1fr));
+        gap:var(--space-4)} 
+        
+    .multi-card{
+        display:grid;
+        gap:var(--space-3);
+        align-content:start;
+        min-height:224px} 
+        
+    .multi-head{
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        gap:var(--space-3)} 
+        
+    .badge{
+        display:inline-flex;
+        align-items:center;
+        padding:.28rem .6rem;
+        border-radius:var(--radius-full);
+        background:var(--color-primary-highlight);
+        color:var(--color-primary);
+        font-size:var(--text-xs);
+        font-weight:700}
+
+    @media (max-width:980px){
+        
+    .hero,.result-grid,
+    .multi-results-grid{
+        grid-template-columns:1fr} 
+        
+    .grid-2{
+        grid-template-columns:1fr}} 
+        
+    @media (max-width:640px){
+        
+    .app-shell{
+        padding:var(--space-4)} 
+        
+    .hero-main,.hero-side,.card{
+        padding:var(--space-5)} 
+        
+    .actions{
+        flex-direction:column} 
+        
+    .btn{
+        width:100%} 
+        
+    textarea.input{
+        min-height:60px;
+        height:60px}
+        }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Lewati ke konten utama</a>
+  <div class="app-shell">
+    <header class="topbar" aria-label="Header aplikasi">
+      <div class="brand" aria-label="Logo aplikasi">
+        <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><rect x="10" y="10" width="44" height="44" rx="12"></rect><path d="M22 44V20"></path><path d="M32 44V16"></path><path d="M42 44V24"></path><path d="M18 44H46"></path></svg>
+        <div class="brand-copy"><strong>Penerjemah Nada Angklung</strong><span>Bass partai huruf + melodi angka</span></div>
+      </div>
+      <button class="theme-toggle" data-theme-toggle aria-label="Ganti tema"></button>
+    </header>
+
+    <main id="main">
+      <section class="hero">
+        <div class="panel hero-main">
+          <div class="eyebrow">Kamus digital angklung</div>
+          <h1>Satu aplikasi untuk menerjemahkan angklung bass partai dan angklung melodi.</h1>
+          <p class="lead">Masukkan identitas angklung sesuai kebutuhanmu, lalu aplikasi akan langsung memecah input dan menerjemahkan setiap item menjadi panel-card hasilnya masing-masing.</p>
+        </div>
+        <aside class="panel hero-side" aria-label="Ringkasan pola">
+          <div class="mini-stat"><strong>Bass partai</strong><span>Angklung terendah memakai identitas huruf.</span></div>
+          <div class="mini-stat"><strong>Melodi</strong><span>Angklung di atasnya memakai identitas angka.</span></div>
+          <div class="mini-stat"><strong>Multi input</strong><span>Satu kolom input dapat memuat sampai 6 identitas angklung.</span></div>
+          <div class="mini-stat"><strong>Warna solmisasi</strong><span>Biru = rendah, hijau = tengah, merah = tinggi, hitam = tinggi 2 oktaf.</span></div>
+        </aside>
+      </section>
+
+      <section class="workspace">
+        <section class="panel card" aria-labelledby="translator-title">
+          <h2 id="translator-title">Input Angklung</h2>
+          <p class="section-note">Masukkan daftar huruf atau angka dalam satu kolom. Maksimal 6 item per sekali terjemah.</p>
+          <div class="controls">
+            <div class="grid-2">
+              <div class="field"><label for="doSelect">Nada dasar do</label><select id="doSelect" class="select"></select></div>
+              <div class="field"><label for="batchInput">Input Nomor Angklung</label><textarea id="batchInput" class="input"></textarea></div>
+            </div>
+            <div class="actions"><button class="btn btn-primary" id="translateBtn">Terjemahkan semua</button><button class="btn btn-secondary" id="fillExampleBtn">Isi contoh cepat</button><button class="btn btn-ghost" id="resetBtn">Reset do = A</button></div>
+          </div>
+        </section>
+
+        <section class="panel card" aria-labelledby="result-title">
+          <h2 id="result-title">Hasil terjemahan</h2>
+          <p class="section-note">Setiap input angklung akan mendapatkan panel-card sendiri.</p>
+          <div class="multi-results-wrap">
+            <div class="multi-results-grid" id="multiResults"></div>
+          </div>
+        </section>
+      </section>
+
+      <div class="section-toggle-row"><button class="btn btn-secondary" id="toggleLowerPanelsBtn" aria-expanded="true">Sembunyikan panel bawah</button></div>
+
+      <div id="lowerPanels">
+        <section class="workspace" style="margin-top: var(--space-6);">
+          <section class="panel card" aria-labelledby="map-title">
+            <h2 id="map-title">Pola identitas</h2>
+            <p class="section-note">Huruf dipakai untuk bass partai terendah, sedangkan angka dipakai untuk siklus melodi.</p>
+            <div class="sequence">
+              <div><p class="muted" style="margin-bottom: var(--space-2);">Angklung melodi per siklus</p><div class="token-row" id="absoluteTokens"></div></div>
+              <div><p class="muted" style="margin-bottom: var(--space-2);">Angklung bass partai</p><div class="token-row" id="bassTokens"></div></div>
+              <div><p class="muted" style="margin-bottom: var(--space-2);">Posisi do aktif</p><div class="token-row" id="doMarker"></div></div>
+            </div>
+          </section>
+
+          <section class="panel card" aria-labelledby="table-title">
+            <h2 id="table-title">Daftar terjemahan</h2>
+            <p class="section-note">Tabel ini tetap tersedia sebagai tampilan daftar ringkas.</p>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Input</th><th>Jenis</th><th>Nada absolut</th><th>Solmisasi</th><th>Angka visual</th><th>Register</th><th>Label lengkap</th></tr></thead>
+                <tbody id="batchTableBody"></tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+
+        <section class="workspace" style="margin-top: var(--space-6);">
+          <section class="panel card" aria-labelledby="guide-title">
+            <h2 id="guide-title">Aturan input</h2>
+            <div class="hint-list">
+              <div class="hint-item"><strong>Huruf = bass partai.</strong><div class="muted">Contoh: g, gis, a, ais/bes, b, c, cis, d, dis, e, f.</div></div>
+              <div class="hint-item"><strong>Angka = melodi.</strong><div class="muted">Contoh: 0, 1, 2, 10, 22, 30.</div></div>
+              <div class="hint-item"><strong>Maksimal 6 input.</strong><div class="muted">Tulis dalam satu kolom, pisahkan dengan koma, lalu setiap item akan dibuatkan satu panel-card terpisah.</div></div>
+              <div class="hint-item"><strong>Visual angka.</strong><div class="muted">Contoh: <span class="legend-cipher"><span class="cipher-visual cipher-slashed">1</span></span> untuk di, <span class="legend-cipher"><span class="cipher-visual cipher-slashed">2</span></span> untuk ri, <span class="legend-cipher"><span class="cipher-visual cipher-slashed">4</span></span> untuk fi, dan <span class="legend-cipher"><span class="cipher-visual cipher-backslashed">7</span></span> untuk sa.</div></div>
+            </div>
+          </section>
+          <section class="panel card" aria-labelledby="note-title">
+            <h2 id="note-title">Catatan</h2>
+            <p class="section-note">Bass partai diperlakukan sebagai register terendah, sehingga hasil huruf otomatis diberi label rendah. Melodi angka tetap memakai perhitungan register relatif terhadap do aktif.</p>
+          </section>
+        </section>
+      </div>
+
+      <p class="footer-note">Designed by Ardian Sumarwan</p>
+    </main>
+  </div>
+
+  <script>
+    const ABSOLUTE_NOTES = ['Fis', 'G', 'Gis', 'A', 'Ais', 'B', 'C', 'Cis', 'D', 'Dis', 'E', 'F'];
+    const SOLFEGE_CHROMATIC = ['do', 'di', 're', 'ri', 'mi', 'fa', 'fi', 'sol', 'sel', 'la', 'sa', 'ti'];
+    const noteToIndex = Object.fromEntries(ABSOLUTE_NOTES.map((n, i) => [n, i]));
+    const BASS_MAP = { 'g': { note: 'G', index: 1 }, 'gis': { note: 'Gis', index: 2 }, 'a': { note: 'A', index: 3 }, 'ais': { note: 'Ais', index: 4 }, 'bes': { note: 'Ais', index: 4 }, 'b': { note: 'B', index: 5 }, 'c': { note: 'C', index: 6 }, 'cis': { note: 'Cis', index: 7 }, 'd': { note: 'D', index: 8 }, 'dis': { note: 'Dis', index: 9 }, 'e': { note: 'E', index: 10 }, 'f': { note: 'F', index: 11 } };
+    const SLOT_COUNT = 6;
+
+    const doSelect = document.getElementById('doSelect');
+    const batchInput = document.getElementById('batchInput');
+    const translateBtn = document.getElementById('translateBtn');
+    const fillExampleBtn = document.getElementById('fillExampleBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const multiResults = document.getElementById('multiResults');
+    const absoluteTokens = document.getElementById('absoluteTokens');
+    const bassTokens = document.getElementById('bassTokens');
+    const doMarker = document.getElementById('doMarker');
+    const batchTableBody = document.getElementById('batchTableBody');
+    const lowerPanels = document.getElementById('lowerPanels');
+    const toggleLowerPanelsBtn = document.getElementById('toggleLowerPanelsBtn');
+
+    function mod(n, m) { return ((n % m) + m) % m; }
+    function normalizeToken(token) { return token.trim().toLowerCase(); }
+    function getRegisterLabel(relativeOctave) { if (relativeOctave < 0) return 'rendah'; if (relativeOctave === 0) return 'tengah'; if (relativeOctave === 1) return 'tinggi'; return 'tinggi 2 oktaf'; }
+    function getSolfegeClass(register) { if (register === 'rendah') return 'solfege-low'; if (register === 'tengah') return 'solfege-mid'; if (register === 'tinggi') return 'solfege-high'; return 'solfege-high2'; }
+    function getReadableSolfege(solfege, register) { return register === 'tengah' ? solfege : `${solfege} ${register}`; }
+    function getCipherMeta(solfege) {
+      const map = { do: { digit: '1', mark: 'none' }, di: { digit: '1', mark: 'slash' }, re: { digit: '2', mark: 'none' }, ri: { digit: '2', mark: 'slash' }, mi: { digit: '3', mark: 'none' }, fa: { digit: '4', mark: 'none' }, fi: { digit: '4', mark: 'slash' }, sol: { digit: '5', mark: 'none' }, sel: { digit: '5', mark: 'slash' }, la: { digit: '6', mark: 'none' }, sa: { digit: '7', mark: 'backslash' }, ti: { digit: '7', mark: 'none' } };
+      return map[solfege] || { digit: '-', mark: 'none' };
+    }
+    function renderCipherHtml(meta, colorClass='') {
+      const markClass = meta.mark === 'slash' ? ' cipher-slashed' : meta.mark === 'backslash' ? ' cipher-backslashed' : '';
+      return `<span class="cipher-group ${colorClass}"><span class="cipher-visual${markClass}">${meta.digit}</span></span>`;
+    }
+
+    function translateMelodyNumber(number, doNote) {
+      const absoluteIndex = mod(number, 12);
+      const absoluteNote = ABSOLUTE_NOTES[absoluteIndex];
+      const doIndex = noteToIndex[doNote];
+      const relativeIndex = mod(absoluteIndex - doIndex, 12);
+      const solfege = SOLFEGE_CHROMATIC[relativeIndex];
+      const relativeOctave = Math.floor((number - doIndex) / 12);
+      const register = getRegisterLabel(relativeOctave);
+      return { raw: String(number), type: 'melodi', absoluteIndex, absoluteNote, solfege, register, readable: getReadableSolfege(solfege, register), solfegeClass: getSolfegeClass(register), cipher: getCipherMeta(solfege), canonical: `Nomor ${number}` };
+    }
+
+    function translateBassSymbol(symbol, doNote) {
+      const key = normalizeToken(symbol);
+      const bass = BASS_MAP[key];
+      if (!bass) return null;
+      const doIndex = noteToIndex[doNote];
+      const relativeIndex = mod(bass.index - doIndex, 12);
+      const solfege = SOLFEGE_CHROMATIC[relativeIndex];
+      const register = 'rendah';
+      return { raw: symbol, type: 'bass partai', absoluteIndex: bass.index, absoluteNote: bass.note, solfege, register, readable: `${solfege} rendah`, solfegeClass: getSolfegeClass(register), cipher: getCipherMeta(solfege), canonical: `Huruf ${key}` };
+    }
+
+    function translateToken(token, doNote) {
+      const cleaned = normalizeToken(token);
+      if (!cleaned) return null;
+      if (/^\d+$/.test(cleaned)) return translateMelodyNumber(Number(cleaned), doNote);
+      return translateBassSymbol(cleaned, doNote);
+    }
+
+    function renderSelectors() {
+      doSelect.innerHTML = ABSOLUTE_NOTES.map(note => `<option value="${note}">${note}</option>`).join('');
+      doSelect.value = 'C';
+    }
+
+    function renderTokens() {
+      absoluteTokens.innerHTML = ABSOLUTE_NOTES.map((note, index) => `<span class="token">${index} = ${note}</span>`).join('');
+      bassTokens.innerHTML = ['g','gis','a','ais/bes','b','c','cis','d','dis','e','f'].map(label => `<span class="token">${label}</span>`).join('');
+    }
+
+    function renderDoMarker(doNote) {
+      const doIndex = noteToIndex[doNote];
+      doMarker.innerHTML = ABSOLUTE_NOTES.map((note, index) => `<span class="token" style="background:${index===doIndex?'var(--color-primary)':'var(--color-primary-highlight)'};color:${index===doIndex?'var(--color-text-inverse)':'var(--color-primary)'}">${note}${index===doIndex?' = do':''}</span>`).join('');
+    }
+
+    function getInputValues() {
+      return batchInput.value.split(/[\n,;]+/).map(v => v.trim()).filter(Boolean).slice(0, SLOT_COUNT);
+    }
+
+    function renderMultiCards(results, doNote) {
+      if (!results.length) {
+        multiResults.innerHTML = `<div class="multi-card"><small>Belum ada input</small><div class="sub">Masukkan data angklung pada kolom input untuk melihat hasil terjemahan.</div></div>`;
+        return;
+      }
+      multiResults.innerHTML = results.map((r, index) => {
+        if (!r) {
+          return `<article class="multi-card"><div class="multi-head"><small>Input ${index + 1}</small><span class="badge">tidak valid</span></div><strong>-</strong><div class="sub">Input tidak dikenali</div></article>`;
+        }
+        return `
+          <article class="multi-card">
+            <div class="multi-head"><small>Input ${index + 1}</small><span class="badge">${r.type}</span></div>
+            <strong>${r.raw}</strong>
+            <div class="sub">Nada absolut: <strong>${r.absoluteNote}</strong></div>
+            <div class="sub">Solmisasi: <span class="${r.solfegeClass}">${r.readable}</span></div>
+            <div class="sub">Angka visual: ${renderCipherHtml(r.cipher, r.solfegeClass)}</div>
+            <div class="sub">Register: ${r.register}</div>
+            <div class="sub">Jika do = ${doNote}</div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    function renderBatchTable(results) {
+      batchTableBody.innerHTML = results.map(r => {
+        if (!r) return '';
+        return `<tr><td>${r.raw}</td><td>${r.type}</td><td>${r.absoluteNote}</td><td class="${r.solfegeClass}">${r.solfege}</td><td>${renderCipherHtml(r.cipher, r.solfegeClass)}</td><td>${r.register}</td><td class="${r.solfegeClass}">${r.readable}</td></tr>`;
+      }).join('');
+    }
+
+    function updateAll() {
+      const doNote = doSelect.value;
+      const tokens = getInputValues();
+      const results = tokens.map(token => translateToken(token, doNote));
+      renderDoMarker(doNote);
+      renderMultiCards(results, doNote);
+      renderBatchTable(results);
+    }
+
+    fillExampleBtn.addEventListener('click', () => {
+      doSelect.value = 'C';
+      batchInput.value = 'c,1,4,10,22,27';
+      updateAll();
+    });
+
+    resetBtn.addEventListener('click', () => {
+      doSelect.value = 'A';
+      batchInput.value = 'g,3';
+      updateAll();
+    });
+
+    doSelect.addEventListener('input', updateAll);
+    batchInput.addEventListener('input', updateAll);
+    translateBtn.addEventListener('click', updateAll);
+
+    toggleLowerPanelsBtn.addEventListener('click', () => {
+      const hidden = lowerPanels.classList.toggle('hidden-panels');
+      toggleLowerPanelsBtn.textContent = hidden ? 'Tampilkan panel bawah' : 'Sembunyikan panel bawah';
+      toggleLowerPanelsBtn.setAttribute('aria-expanded', String(!hidden));
+    });
+
+    (function(){ const t=document.querySelector('[data-theme-toggle]'); const r=document.documentElement; let d=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'; r.setAttribute('data-theme',d); function paint(){ t.setAttribute('aria-label','Ganti ke mode ' + (d==='dark'?'terang':'gelap')); t.innerHTML=d==='dark'?'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>':'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>'; } paint(); t.addEventListener('click',()=>{ d=d==='dark'?'light':'dark'; r.setAttribute('data-theme',d); paint(); }); })();
+
+    renderSelectors();
+    renderTokens();
+    updateAll();
+  </script>
+</body>
+</html>
