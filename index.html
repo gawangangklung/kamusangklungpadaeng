@@ -23,15 +23,162 @@
 </head>
 <body>
 <a class="skip" href="#main">Lewati ke konten</a><div class="shell">
-<header class="topbar"><div class="brand"><div class="logo" aria-hidden="true"><svg width="27" height="27" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4"><path d="M18 48V22M32 48V15M46 48V26M13 48h38"/><rect x="10" y="9" width="44" height="46" rx="11"/></svg></div><div><strong>KALUNG — Kamus Angklung</strong><span>Angklung Padaeng Tone Identity</span></div></div><button class="icon-btn" id="themeToggle" aria-label="Ganti tema"></button></header>
+<header class="topbar">
+    <div class="brand">
+        <div class="logo" aria-hidden="true">
+            <svg width="27" height="27" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4">
+                <path d="M18 48V22M32 48V15M46 48V26M13 48h38"/>
+                <rect x="10" y="9" width="44" height="46" rx="11"/>
+            </svg>
+        </div>
+        
+        <div><strong>KALUNG — Kamus Angklung</strong>
+            <span>Angklung Padaeng Tone Identity</span>
+        </div>
+    </div>
+    
+    <button class="icon-btn" id="themeToggle" aria-label="Ganti tema"></button>
+
+</header>
 <main id="main">
-<section class="hero"><div class="hero-main"><div class="eyebrow"><i></i>Kamus digital angklung</div><h1>Terjemahkan identitas angklung dengan lebih cepat.</h1><p class="lead">Masukkan huruf untuk bass partai atau angka untuk melodi. KALUNG menerjemahkan setiap identitas ke nada absolut, solmisasi, register, dan angka musik visual.</p></div><aside class="hero-side"><div class="stat"><strong>G—F</strong><span>Bass partai memakai identitas huruf</span></div><div class="stat"><strong>0—30+</strong><span>Melodi memakai identitas angka</span></div><div class="stat"><strong>Tanpa batas</strong><span>Jumlah input dapat ditambahkan bebas</span></div><div class="stat"><strong>4 register</strong><span>Warna menunjukkan posisi nada</span></div></aside></section>
-<section class="panel"><div class="panel-head"><div><h2>Input Angklung</h2><p class="note">Pisahkan data dengan koma, titik koma, atau baris baru. Jumlah item tidak dibatasi.</p></div><span class="counter" id="counter">0 item</span></div><div class="translator"><div class="field"><label for="doSelect">Nada dasar do</label><select id="doSelect" class="select"></select><div class="quick" id="doChips"></div></div><div class="field"><label for="batchInput">Nomor atau huruf angklung</label><textarea id="batchInput" class="input" placeholder="Contoh: c, 1, 4, 10, 22, 27"></textarea><div class="quick" id="quickTokens"></div></div></div><div class="actions"><button class="btn primary" id="translateBtn">✦ Terjemahkan semua</button><button class="btn secondary" id="fillExampleBtn">Isi contoh</button><button class="btn ghost" id="resetBtn">Reset do = A</button></div></section>
-<section class="panel"><div class="panel-head"><div><h2>Hasil terjemahan</h2><p class="note">Angka visual dan seluruh nilai hasil disusun rapi di sisi kanan kartu.</p><div class="visual-key"><span><i class="legend-dot"></i> bawah: rendah</span><span>tanpa titik: tengah</span><span><i class="legend-dot" style="transform:translateY(-5px)"></i> atas: tinggi</span><span><i class="legend-dot legend-two" style="transform:translateY(-5px)"></i> dua titik samping: tinggi 2 oktaf</span></div></div><button class="btn secondary" id="copyBtn">Salin hasil</button></div><div class="results" id="multiResults" aria-live="polite"></div></section>
-<div style="display:flex;justify-content:flex-end;margin:-5px 0 20px"><button class="btn secondary" id="toggleBtn" aria-expanded="true">Sembunyikan panel referensi</button></div>
-<div id="lowerPanels"><section class="panel"><div class="panel-head"><div><h2>Peta identitas</h2><p class="note">Klik nada pada rel untuk menjadikannya nada dasar do.</p></div></div><div class="map-grid"><div><p class="note" style="margin-bottom:10px">Siklus angklung melodi</p><div class="note-rail" id="noteRail"></div></div><div><p class="note" style="margin-bottom:10px">Angklung bass partai</p><div class="bass-list" id="bassTokens"></div><p class="note" style="margin:17px 0 8px">Kode warna register</p><div class="bass-list"><span class="bass low">Rendah</span><span class="bass mid">Tengah</span><span class="bass high">Tinggi</span><span class="bass high2">Tinggi 2 oktaf</span></div></div></div></section><section class="panel"><div class="panel-head"><div><h2>Daftar terjemahan</h2><p class="note">Tampilan ringkas untuk seluruh input aktif.</p></div></div><div class="table-wrap"><table><thead><tr><th>Input</th><th>Jenis</th><th>Nada absolut</th><th>Solmisasi</th><th>Angka</th><th>Register</th></tr></thead><tbody id="batchTableBody"></tbody></table></div></section><section class="lower"><section class="panel"><h2>Aturan input</h2><div class="guide"><div class="guide-item"><b>Huruf = bass partai</b><span>g, gis, a, ais/bes, b, c, cis, d, dis, e, f</span></div><div class="guide-item"><b>Angka = melodi</b><span>0, 1, 2, 10, 22, 30, dan seterusnya.</span></div><div class="guide-item"><b>Notasi register</b><span>Titik bawah: rendah; tanpa titik: tengah; satu titik atas: tinggi; dua titik atas berdampingan: tinggi 2 oktaf.</span></div></div></section><section class="panel"><h2>Catatan</h2><p class="note">Bass partai selalu diperlakukan sebagai register rendah. Untuk melodi, register dihitung relatif terhadap nada dasar do yang aktif.</p></section></section></div><p class="footer">Designed by Ardian Sumarwan</p>
-</main></div><div class="toast" id="toast" role="status"></div>
+<section class="hero"><div class="hero-main"><div class="eyebrow"><i>
+</i>Kamus digital angklung</div>
+<h1>Terjemahkan identitas angklung dengan lebih cepat.</h1>
+<p class="lead">Masukkan huruf untuk Angklung Melodi Besar atau angka untuk Angklung Melodi Kecil. KALUNG menerjemahkan setiap identitas ke nada absolut, solmisasi, register, dan angka musik visual.</p>
+</div>
+<aside class="hero-side"><div class="stat"><strong>G—F</strong>
+    <span>Angklung Melodi Besar memakai identitas huruf</span>
+</div>
+
+<div class="stat"><strong>0—30+</strong>
+    <span>Angklung Melodi Kecil memakai identitas angka</span>
+</div>
+
+<div class="stat"><strong>Tanpa batas</strong>
+    <span>Jumlah input dapat ditambahkan bebas</span>
+</div>
+
+<div class="stat"><strong>4 register</strong>
+    <span>Warna menunjukkan posisi nada</span>
+</div>
+
+</aside></section>
+<section class="panel"><div class="panel-head"><div>
+    <h2>Input Angklung</h2>
+    <p class="note">Pisahkan Nomor Angklung dengan koma, titik koma, atau baris baru. Jumlah item tidak dibatasi.</p>
+</div>
+
+<span class="counter" id="counter">0 item</span>
+</div><div class="translator"><div class="field">
+    <label for="doSelect">Nada dasar do</label>
+    <select id="doSelect" class="select">
+    </select><div class="quick" id="doChips">
+    </div>
+</div>
+
+<div class="field">
+    <label for="batchInput">Nomor atau huruf angklung</label>
+    <textarea id="batchInput" class="input" placeholder="Contoh: c, 1, 4, 10, 22, 27">
+    </textarea><div class="quick" id="quickTokens">
+    </div>
+</div>
+</div>
+
+<div class="actions">
+    <button class="btn primary" id="translateBtn">✦ Terjemahkan semua</button>
+    <button class="btn secondary" id="fillExampleBtn">Isi contoh</button>
+    <button class="btn ghost" id="resetBtn">Reset do = A</button>
+</div>
+</section>
+
+<section class="panel"><div class="panel-head"><div>
+    <h2>Hasil terjemahan</h2>
+    <p class="note">Angka visual.</p>
+    <div class="visual-key"><span><i class="legend-dot"></i> bawah: rendah</span>
+        <span>tanpa titik: tengah</span>
+        <span><i class="legend-dot" style="transform:translateY(-5px)">
+        </i> atas: tinggi</span>
+        <span><i class="legend-dot legend-two" style="transform:translateY(-5px)"></i> dua titik samping: tinggi 2 oktaf</span>
+    </div>
+</div>
+
+<button class="btn secondary" id="copyBtn">Salin hasil</button>
+</div>
+
+<div class="results" id="multiResults" aria-live="polite">
+</div>
+</section>
+
+<div style="display:flex;justify-content:flex-end;margin:-5px 0 20px">
+    <button class="btn secondary" id="toggleBtn" aria-expanded="true">Sembunyikan panel referensi</button>
+</div>
+
+<div id="lowerPanels">
+    <section class="panel"><div class="panel-head"><div>
+        <h2>Peta identitas</h2>
+        <p class="note">Klik nada pada rel untuk menjadikannya nada dasar do.</p>
+    </div>
+</div>
+
+<div class="map-grid"><div>
+    <p class="note" style="margin-bottom:10px">Siklus angklung melodi</p>
+    <div class="note-rail" id="noteRail">
+    </div>
+</div>
+<div><p class="note" style="margin-bottom:10px">Angklung Melodi Besar</p>
+    <div class="bass-list" id="bassTokens">
+    </div><p class="note" style="margin:17px 0 8px">Kode warna register</p>
+    <div class="bass-list"><span class="bass low">Rendah</span>
+        <span class="bass mid">Tengah</span>
+        <span class="bass high">Tinggi</span>
+        <span class="bass high2">Tinggi 2 oktaf</span>
+    </div>
+</div>
+</div>
+</section>
+
+<section class="panel"><div class="panel-head"><div>
+    <h2>Daftar terjemahan</h2>
+    <p class="note">Tampilan ringkas untuk seluruh input aktif.</p>
+</div>
+</div>
+
+<div class="table-wrap">
+    <table><thead><tr><th>Input</th><th>Jenis</th><th>Nada absolut</th><th>Solmisasi</th><th>Angka</th><th>Register</th></tr></thead>
+        <tbody id="batchTableBody"></tbody>
+    </table>
+</div>
+</section>
+
+<section class="lower"><section class="panel">
+    <h2>Aturan input</h2>
+    <div class="guide"><div class="guide-item"><b>Huruf = Angklung Melodi Besar</b>
+        <span>g, gis, a, ais/bes, b, c, cis, d, dis, e, f</span>
+    </div>
+    <div class="guide-item"><b>Angka = Angklung Melodi Kecil</b>
+        <span>0, 1, 2, 10, 22, 30, dan seterusnya.</span>
+    </div>
+    
+    <div class="guide-item"><b>Notasi register</b>
+        <span>Titik bawah: rendah; tanpa titik: tengah; satu titik atas: tinggi; dua titik atas berdampingan: tinggi 2 oktaf.</span>
+    </div>
+</div>
+</section>
+
+<section class="panel">
+    <h2>Catatan</h2>
+    <p class="note">Angklung Melodi Besar selalu diperlakukan sebagai register rendah. Untuk Angklung Melodi Kecil, register dihitung relatif terhadap nada dasar do yang aktif.</p>
+</section>
+</section>
+
+</div><p class="footer">Designed by Ardian Sumarwan</p>
+</main>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
 <script>
+
 const ABSOLUTE_NOTES=['Fis','G','Gis','A','Ais','B','C','Cis','D','Dis','E','F'];
 const SOLFEGE_CHROMATIC=['do','di','re','ri','mi','fa','fi','sol','sel','la','sa','ti'];
 const noteToIndex=Object.fromEntries(ABSOLUTE_NOTES.map((n,i)=>[n,i]));
@@ -42,7 +189,7 @@ const escapeHTML=v=>String(v).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>'
 function register(o){return o<0?'rendah':o===0?'tengah':o===1?'tinggi':'tinggi 2 oktaf'}function cls(r){return r==='rendah'?'low':r==='tengah'?'mid':r==='tinggi'?'high':'high2'}function registerShort(r){return r==='tinggi 2 oktaf'?'2 okt':r}function dotClass(r){return r==='rendah'?'dot-low':r==='tinggi'?'dot-high':r==='tinggi 2 oktaf'?'dot-high2':''}function dotLabel(r){return r==='rendah'?'satu titik bawah':r==='tinggi'?'satu titik atas':r==='tinggi 2 oktaf'?'dua titik atas berdampingan':'tanpa titik'}
 function cipher(s){return({do:['1',''],di:['1','slash'],re:['2',''],ri:['2','slash'],mi:['3',''],fa:['4',''],fi:['4','slash'],sol:['5',''],sel:['5','slash'],la:['6',''],sa:['7','backslash'],ti:['7','']}[s]||['-',''])}
 function cipherHTML(s,c,r){const[d,mark]=cipher(s),slash=mark==='slash'?' dengan tanda /':mark==='backslash'?' dengan tanda \\':'';let dots='';if(r==='rendah'||r==='tinggi')dots='<i class="register-dot" aria-hidden="true"></i>';if(r==='tinggi 2 oktaf')dots='<i class="register-dot dot-left" aria-hidden="true"></i><i class="register-dot dot-right" aria-hidden="true"></i>';return `<span class="visual-number ${c} ${dotClass(r)}" aria-label="angka ${d}${slash}, ${dotLabel(r)}" title="angka ${d}${slash}, ${dotLabel(r)}"><span class="cipher ${mark}" aria-hidden="true">${d}</span>${dots}</span>`}
-function melody(n,d){const ai=mod(n,12),di=noteToIndex[d],s=SOLFEGE_CHROMATIC[mod(ai-di,12)],r=register(Math.floor((n-di)/12));return{raw:String(n),type:'melodi',absoluteNote:ABSOLUTE_NOTES[ai],solfege:s,register:r,solfegeClass:cls(r),readable:r==='tengah'?s:`${s} ${r}`}}function bass(symbol,d){const b=BASS_MAP[normalizeToken(symbol)];if(!b)return null;const s=SOLFEGE_CHROMATIC[mod(b.index-noteToIndex[d],12)],r='rendah';return{raw:symbol,type:'bass partai',absoluteNote:b.note,solfege:s,register:r,solfegeClass:cls(r),readable:`${s} rendah`}}function translate(t,d){const x=normalizeToken(t);return !x?null:/^\d+$/.test(x)?melody(Number(x),d):bass(x,d)}function values(){return batchInput.value.split(/[\n,;]+/).map(x=>x.trim()).filter(Boolean)}
+function melody(n,d){const ai=mod(n,12),di=noteToIndex[d],s=SOLFEGE_CHROMATIC[mod(ai-di,12)],r=register(Math.floor((n-di)/12));return{raw:String(n),type:'Angklung Melodi Kecil',absoluteNote:ABSOLUTE_NOTES[ai],solfege:s,register:r,solfegeClass:cls(r),readable:r==='tengah'?s:`${s} ${r}`}}function bass(symbol,d){const b=BASS_MAP[normalizeToken(symbol)];if(!b)return null;const s=SOLFEGE_CHROMATIC[mod(b.index-noteToIndex[d],12)],r='rendah';return{raw:symbol,type:'Angklung Melodi Besar',absoluteNote:b.note,solfege:s,register:r,solfegeClass:cls(r),readable:`${s} rendah`}}function translate(t,d){const x=normalizeToken(t);return !x?null:/^\d+$/.test(x)?melody(Number(x),d):bass(x,d)}function values(){return batchInput.value.split(/[\n,;]+/).map(x=>x.trim()).filter(Boolean)}
 function detail(label,value,c=''){return `<div class="detail"><span>${label}</span><span class="detail-value ${c}">${value}</span></div>`}function card(r,i){const delay=i<12?i*.025:0;if(!r)return `<article class="result" style="animation-delay:${delay}s"><div class="result-top"><span>Input ${i+1}</span><span class="badge">tidak valid</span></div><div class="circle-stage"><div class="tone-orbit invalid-circle"><div class="tone-core"><div class="raw">?</div><small>Periksa input</small></div></div></div><p class="note">Gunakan angka non-negatif atau huruf bass yang dikenali.</p></article>`;return `<article class="result" style="animation-delay:${delay}s"><div class="result-top"><span>Input ${i+1}</span><span class="badge">${r.type}</span></div><div class="circle-stage"><div class="tone-orbit"><span class="orbit-tag tag-note">${r.absoluteNote}</span><span class="orbit-tag tag-solfege ${r.solfegeClass}">${r.solfege}</span><span class="orbit-tag tag-register ${r.solfegeClass}">${registerShort(r.register)}</span><div class="tone-core"><div class="raw">${escapeHTML(r.raw)}</div><small>identitas</small></div></div></div><div class="result-data">${detail('Nada absolut',r.absoluteNote)}${detail('Solmisasi',r.readable,r.solfegeClass)}${detail('Angka visual',cipherHTML(r.solfege,r.solfegeClass,r.register))}${detail('Register',r.register,r.solfegeClass)}</div></article>`}
 function renderCards(rs){multiResults.innerHTML=!rs.length?'<div class="empty">Belum ada input. Masukkan identitas angklung untuk memulai terjemahan.</div>':rs.map(card).join('')}function renderTable(rs){const valid=rs.filter(Boolean);batchTableBody.innerHTML=valid.length?valid.map(r=>`<tr><td>${escapeHTML(r.raw)}</td><td>${r.type}</td><td>${r.absoluteNote}</td><td class="${r.solfegeClass}">${r.solfege}</td><td>${cipherHTML(r.solfege,r.solfegeClass,r.register)}</td><td>${r.register}</td></tr>`).join(''):'<tr><td colspan="6" class="note">Belum ada hasil valid.</td></tr>'}function renderRail(){const cur=doSelect.value;$('noteRail').innerHTML=ABSOLUTE_NOTES.map((n,i)=>`<button class="note-dot ${n===cur?'active':''}" data-note="${n}" title="Jadikan ${n} sebagai do"><b>${i}</b><span>${n}</span></button>`).join('');document.querySelectorAll('.note-dot').forEach(x=>x.onclick=()=>{doSelect.value=x.dataset.note;update();toast(`${x.dataset.note} menjadi nada dasar do`)})}function update(){const t=values(),rs=t.map(x=>translate(x,doSelect.value));counter.textContent=`${t.length} item`;renderCards(rs);renderTable(rs);renderRail()}function toast(t){const e=$('toast');e.textContent=t;e.classList.add('show');clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>e.classList.remove('show'),2200)}function appendToken(t){batchInput.value=batchInput.value.trim()?`${batchInput.value.trim()}, ${t}`:t;batchInput.focus();update()}
 function init(){doSelect.innerHTML=ABSOLUTE_NOTES.map(x=>`<option value="${x}">${x}</option>`).join('');doSelect.value='C';$('doChips').innerHTML=['C','A','Fis','G'].map(x=>`<button class="chip" data-do="${x}">do = ${x}</button>`).join('');document.querySelectorAll('[data-do]').forEach(x=>x.onclick=()=>{doSelect.value=x.dataset.do;update()});$('quickTokens').innerHTML=['g','c','0','1','4','10','22','30'].map(x=>`<button class="chip" data-token="${x}">${x}</button>`).join('');document.querySelectorAll('.chip[data-token]').forEach(x=>x.onclick=()=>appendToken(x.dataset.token));$('bassTokens').innerHTML=['g','gis','a','ais','bes','b','c','cis','d','dis','e','f'].map(x=>`<button class="bass" data-token="${x}">${x}</button>`).join('');document.querySelectorAll('.bass[data-token]').forEach(x=>x.onclick=()=>appendToken(x.dataset.token));update()}
